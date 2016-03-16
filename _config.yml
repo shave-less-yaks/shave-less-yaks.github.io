@@ -1,51 +1,40 @@
-# Site wide configuration
+# Site settings
+title: "Yaks All The Way Down"
+logo: yak.png # image from https://www.flickr.com/photos/lwr/5496279831/in/set-72157594159055823
+email: no-reply@yaks-all-the-way-down.com
+description: Shave less yaks!
+#url: "http://yaks-all-the-way-down.com" # the base hostname & protocol for your site
+url: "/"
+baseurl: "" # the subpath of your site, e.g. /blog/
+twitter_username: none
+github_username:  none
 
-title: Yaks All The Way Down
-description:
-logo: # 120x120 px default image used for Twitter summary card
-teaser: # 400x250 px default teaser image used in image archive grid
-locale: en
-url: 
+#authors
+authors:
+  gharcombe-minson:
+    name: Gareth Harcombe-Minson
+    bio: Gamer. Oh and I code and stuff.
+    thumb-img: garadox.png
+  mcameron:
+    name: Michael Cameron
+    bio: TBD
+    thumb-img: tbd.png
+  jlane:
+    name: Joe Lane
+    bio: TBD
+    thumb-img: tbd.png
+  tednaleid:
+    name: Ted Naleid
+    bio: TBD
+    thumb-img: tbd.png
 
-# Jekyll configuration
+permalink: pretty
+paginate: 5
 
-sass:
-  sass_dir: _sass
-  style: compressed
-permalink: /:categories/:title/
-kramdown:
-  toc_levels: 1..2
+# Build settings
+markdown: kramdown
 highlighter: rouge
+
 gems:
   - jekyll-sitemap
-  - jekyll-gist
-
-
-# Octopress configuration
-
-# Default extensions
-post_ext: md
-page_ext: md
-
-# Found in _templates/
-post_layout: article
-page_layout: article
-
-# Format titles with titlecase?
-titlecase: true
-
-
-# Site owner
-owner: 
-  name:
-  email:
-  twitter:
-  google:
-    ad-client:
-    ad-slot:
-  bio:
-  avatar: bio-photo.jpg # 160x160 px image for author byline
-  disqus-shortname:
-
-
-exclude: ["lib", "config.rb", ".sass-cache", "Capfile", "config", "log", "Rakefile", "Rakefile.rb", "tmp", "*.sublime-project", "*.sublime-workspace", "Gemfile", "Gemfile.lock", "README.md", "LICENSE", "node_modules", "Gruntfile.js", "package.json"]
+  - jekyll-paginate
