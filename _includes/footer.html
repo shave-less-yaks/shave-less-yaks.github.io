@@ -6,19 +6,30 @@
                 <strong>Feed</strong>
             </a>
 
-            {% if site.logo %}
+            {% if page.author %}
             <a href="{{ site.baseurl }}" class="photo circle">
               <span style="background-image: url('{{ site.baseurl }}/assets/images/{{ site.authors[page.author].thumb-img }}');">
                 <img src="{{ site.baseurl }}/assets/images/{{ site.authors[page.author].thumb-img }}" alt="{{ site.authors[page.author].name }}"/>
               </span>
             </a>
-            {% endif %}
 
             <div class="details">
                 <h4><a href="{{ site.url }}" class="url n">{{ site.authors[page.author].name }}</a></h4>
                 <span>{{ site.authors[page.author].bio }}</span>
                 <span>Published with <a href="https://jekyllrb.com">Jekyll</a></span><br>
             </div>
+            {% else %}
+            <a href="{{ site.baseurl }}" class="photo circle">
+              <span style="background-image: url('{{ site.baseurl }}/assets/images/{{ site.logo }}');">
+                <img src="{{ site.baseurl }}/assets/images/{{ site.logo }}" alt="{{ site.title }}"/>
+              </span>
+            </a>
+
+            <div class="details">
+                <h4><a href="{{ site.url }}" class="url n">{{ site.title }}</a></h4>
+                <span>Published with <a href="https://jekyllrb.com">Jekyll</a></span><br>
+            </div>
+            {% endif %}
         </div>
         <div id="user_bio">
             <div class="inner">
