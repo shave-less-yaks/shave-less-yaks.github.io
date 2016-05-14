@@ -5,8 +5,8 @@
     <description>Yak shaving is so exhausting - shave energy, shave coding!</description>
     <link>//</link>
     <atom:link href="//feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 14 May 2016 16:46:59 -0500</pubDate>
-    <lastBuildDate>Sat, 14 May 2016 16:46:59 -0500</lastBuildDate>
+    <pubDate>Sat, 14 May 2016 16:50:52 -0500</pubDate>
+    <lastBuildDate>Sat, 14 May 2016 16:50:52 -0500</lastBuildDate>
     <generator>Jekyll v3.0.3</generator>
     
       <item>
@@ -88,8 +88,8 @@ below on your PR:&lt;/p&gt;
 &lt;p&gt;Now you have a better understanding of the impact of your PR, and can keep breaking updates out of your parent branches until you’re ready!&lt;/p&gt;
 </description>
         <pubDate>Fri, 22 Apr 2016 00:00:00 -0500</pubDate>
-        <link>//2016/04/22/intro-to-github-jenkins-request-builder/</link>
-        <guid isPermaLink="true">//2016/04/22/intro-to-github-jenkins-request-builder/</guid>
+        <link>//2016/04/22/streamline-pr-with-github-jenkins-request-builder/</link>
+        <guid isPermaLink="true">//2016/04/22/streamline-pr-with-github-jenkins-request-builder/</guid>
         
         
       </item>
