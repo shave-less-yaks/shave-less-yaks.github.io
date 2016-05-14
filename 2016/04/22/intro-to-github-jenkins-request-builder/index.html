@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  
+  <title>Streamlining your GitHub code review process with GitHub Pull Request Builder</title>
+  <meta name="description" content="GitHub’s existing PR (Pull Request) feature makes it easy to see what changed between branches,but it doesn’t always give you the full picture. If you have a...">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="viewport" content="width=device-width initial-scale=1">
+
+  <link rel="shortcut icon" href="">
+
+
+  
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:400,700,400italic,700italic|Open+Sans:400italic,700italic,700,400">
+  <link rel="stylesheet" href="/css/screen.css">
+
+  
+  <link rel="canonical" href="//2016/04/22/intro-to-github-jenkins-request-builder/">
+  <link rel="alternate" type="application/atom+xml" title="Yaks All The Way Down" href="//feed.xml" />
+
+  <script type="text/javascript" src="/assets/javascripts/jquery-2.1.4.min.js"></script>
+</head>
+
+
+  <body class="">
+
+    
+<div id="feature_image">
+  <div class="inner" style="background-image: url('/content/images//github-status.png')">
+    <img src='/content/images/github-status.png'>
+    </div>
+</div>
+
+
+<article role="main" class="image">
+    <header>
+      <a href="/" id="home_link">«</a>
+      <div class="meta"><time datetime="2016-04-22"><a href="/2016/04/22/intro-to-github-jenkins-request-builder/">April 22, 2016</a></time>
+        <span class="count" id="js-reading-time">&nbsp;</span>
+      </div>
+      <h1>Streamlining your GitHub code review process with GitHub Pull Request Builder</h1>
+    </header>
+
+    <div class="text" id="js-post-content">
+        <p>GitHub’s existing PR (Pull Request) feature makes it easy to see what changed between branches,
+but it doesn’t always give you the full picture. If you have any kind of automated testing and 
+currently use Jenkins, the following plugin can give you a full picture of the impact when you’re ready to
+merge a request.</p>
+
+<p>The <a href="https://wiki.jenkins-ci.org/display/JENKINS/GitHub+pull+request+builder+plugin">GitHub Pull Request Builder</a> plugin
+is an easy way to plug your own Jenkins jobs into a pull request. High level features:</p>
+
+<ul>
+  <li>Can run any job you can set up in Jenkins</li>
+  <li>Simple whitelist permissions for running PR jobs</li>
+  <li>Trigger phrases for running specific jobs</li>
+  <li>Test results are published into PR status on GitHub</li>
+  <li>Retry jobs with a phrase, in case of a setup issue with a job</li>
+</ul>
+
+<h4 id="installation">Installation</h4>
+<p>There are no special instructions for installing the plugin - do as you normally would.</p>
+
+<h4 id="configuring-a-sample-job">Configuring a sample job</h4>
+
+<p><img src="/content/images/github-pull-request-builder-sample-job1.png" alt="SCM" />
+You will need to configure the <em>Source Code Management</em> section of your job specifically for the plugin. 
+Note in the image above, the <em>Name</em>, <em>Refspec</em>, and <em>Branch Specifier</em> sections - these ensure the plugin can view changes in PR’s
+and the job runs against the correct commit hash. You will need to click the <em>Advanced</em> button to view some of the above fields.</p>
+
+<p><img src="/content/images/github-pull-request-builder-sample-job2.png" alt="Build Triggers" />
+You will need to select the <em>Advanced</em> and <em>Trigger Setup</em> buttons to view all of the fields shown above. Here’s an explanation
+of the available options:</p>
+
+<ul>
+  <li><a name="Admin-List"></a>Admin list: If you would like to approve running a job against a PR, then list here the github users that can approve running the job.
+Our team is small enough that everyone is automatically approved (see the <a href="#Organization">Organization</a> section).</li>
+  <li><a name="GitHub-Hook"></a>Use GitHub hooks: You may either set the job to poll for new PR’s to run against (see the <a href="#Crontab">Crontab</a> section),
+or if you check this box, and have GitHub hooks set up, Jenkins will be told when a new PR has been created.</li>
+  <li><a name="Trigger-Phrase"></a>Trigger phrase: You can specify a trigger phrase (with regex) to run the job. This can be used to re-run
+a job without making changes to the PR, in case of an environmental build failure for example.</li>
+  <li><a name="Only-Use-Trigger-Phrase"></a>Only use trigger phrase: Selecting this box will suppress running the job on a PR until the
+trigger phrase is found in a PR description or comment.</li>
+  <li><a name="Close-Failed"></a>Close failed pull request automatically: I’ve never used this option, but my guess is the name is 
+self-explanatory.</li>
+  <li><a name="Skip-Build-Phrase"></a>Skip build phrase: You can specify a phrase (with regex) that, if mentioned in the PR description,
+will suppress running this job. <br /><strong>As of May 2016, this feature is broken, and can only be set in the global plugin settings</strong>.</li>
+  <li><a name="Display-Build-Errors"></a>Display build errors on downstream builds: I could not find any documentation on this feature, and 
+looking at the code indicates that nothing is using it, so use at your own peril.</li>
+  <li><a name="Crontab"></a>Crontab: If you are not using GitHub webhooks, then you will need to set a schedule of when the job should
+look for PR’s to run against. In the sample job image, we’re checking every 2 minutes.</li>
+  <li><a name="Whitelist"></a>Whitelist: If you choose not to whitelist entire organizations (see the <a href="#Organization">Organization</a> section), 
+you have the option to whitelist teams or users. Those who are whitelisted will not require approval to run the job against their PR.</li>
+</ul>
+
+<p><img src="/content/images/github-pull-request-builder-sample-job3.png" alt="Build Triggers Contd" /></p>
+
+<ul>
+  <li><a name="Organization"></a>Whitelist Organizations: Check this if you want everyone in the listed organizations
+to be automatically approved, which will trigger the job when the PR is opened.</li>
+  <li><a name="Allow-Whitelist-Admins"></a>Allow whitelisted members of organizations as admins: Selecting this box will allow the above
+whitelisted organizations to act as admins, without naming them individually in the <a href="#Admin-List">Admin List</a>.</li>
+  <li><a name="Build-Every-Pull-Request"></a>Build every pull request automatically without asking: Selecting this box will skip checking the PR
+for trigger, skip or build phrases, or permissions, and just run the job every time. <strong>Risky</strong>.</li>
+  <li><a name="Build-Description"></a>Build description template: The default Jenkins job description will use the PR number and PR title.
+If you would like to change it, you can here.</li>
+  <li><a name="Whitelist-Branches"></a>Whitelist target branches: By adding a branch (or branches) here, it will restrict the job to only
+PR’s merging into those branches.</li>
+  <li><a name="Trigger-Setup"></a>Trigger setup: At a minimum, I recommend changing the <em>Commit Status Context</em> to be specific to this job. 
+If you have multiple job running on each PR, you will see this name displayed in the list of checks on the PR.</li>
+</ul>
+
+<h4 id="impact-on-your-pr">Impact on your PR</h4>
+<p>Once you have a few jobs configured to check your PR’s, and you have run some of them, you will see something like this image
+below on your PR:</p>
+
+<p><img src="/content/images/github-pull-request-builder-sample-job4.png" alt="Build Triggers Contd" /></p>
+
+<p>Now you have a better understanding of the impact of your PR, and can keep breaking updates out of your parent branches until you’re ready!</p>
+
+    </div>
+
+    <menu>
+      <a href="" id="btn_share" class="btn" title="Share">
+        <span aria-hidden="true" data-icon="S"></span>
+        <strong>Share</strong>
+      </a>
+      <a href="http://twitter.com/share?text=Streamlining+your+GitHub+code+review+process+with+GitHub+Pull+Request+Builder&url=//2016/04/22/intro-to-github-jenkins-request-builder/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" id="btn_comment" class="btn" target="_blank">
+        <span aria-hidden="true" data-icon="C"></span> Comment on Twitter
+      </a>
+    </menu>
+</article>
+
+<footer role="contentinfo" class='post-footer'>
+    <div class="inner">
+        <div class="vcard">
+          <a href="/feed.xml" id="btn_feed" class="btn" title="Feed" target="_blank">
+                <span aria-hidden="true" data-icon=")"></span>
+                <strong>Feed</strong>
+            </a>
+
+            
+            <a href="" class="photo circle">
+              <span style="background-image: url('/assets/images/garadox.png');">
+                <img src="/assets/images/garadox.png" alt="Gareth Harcombe-Minson"/>
+              </span>
+            </a>
+
+            <div class="details">
+                <h4><a href="/" class="url n">Gareth Harcombe-Minson</a></h4>
+                <span>Coder, DevOps, Nerdfighter</span>
+                <span>Published with <a href="https://jekyllrb.com">Jekyll</a></span><br>
+            </div>
+            
+        </div>
+        <div id="user_bio">
+            <div class="inner">
+                Yak shaving is so exhausting - shave energy, shave coding!
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<div id="share_modal">
+    <div class="wrap">
+        <div class="inner">
+            <header>
+                Share
+                <a href="" class="close" title="Close">&times;</a>
+            </header>
+
+            <div class="roon-share-links">
+                <a href="https://twitter.com/share" class="twitter-share-button" data-dnt="true">Tweet</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+                <div id="fb-elems">
+                    <div id="fb-root"></div>
+                    <script>(function(d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) return;
+                    js = d.createElement(s); js.id = id;
+                    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=463438580397968";
+                    fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));</script>
+                    <div class="fb-like" data-send="false" data-layout="button_count" data-width="110" data-show-faces="false" data-font="arial"></div>
+                </div>
+
+                <div id="pinit-btn">
+                    <a href="//pinterest.com/pin/create/button/?url=/2016/04/22/intro-to-github-jenkins-request-builder/&amp;description=Streamlining your GitHub code review process with GitHub Pull Request Builder-Yaks All The Way Down " data-pin-do="buttonPin" data-pin-config="beside"><img src="//assets.pinterest.com/images/pidgets/pin_it_button.png"></a>
+                    <script type="text/javascript" src="//assets.pinterest.com/js/pinit.js"></script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+window.onload = function () {
+  reading_time();
+}
+function get_text(el) {
+  ret = "";
+  var length = el.childNodes.length;
+  for(var i = 0; i < length; i++) {
+    var node = el.childNodes[i];
+    if(node.nodeType != 8) {
+      ret += node.nodeType != 1 ? node.nodeValue : get_text(node);
+    }
+  }
+  return ret;
+}
+function reading_time () {
+  var post_content = document.getElementById('js-post-content');
+  if (post_content) {
+    var words = get_text(post_content),
+      count = words.split(/\s+/).length,
+    read_time = Math.ceil((count / 150)),
+        read_time_node = document.createTextNode(read_time + ' min read');
+    document.getElementById('js-reading-time').appendChild(read_time_node);
+  }
+}
+$(function(){
+  var share_modal = $("#share_modal"),
+  update_social_links = true;
+
+  $("#btn_share").click(function(){
+    var that = $(this);
+    share_modal.fadeIn(200);
+    return false;
+  });
+
+  share_modal.click(function(e){
+    if (e.target.className == "wrap" || e.target.id == "share_modal") {
+      share_modal.fadeOut(200);
+    }
+    return false;
+  });
+
+  share_modal.find("div.inner > header > a.close").click(function(){
+    share_modal.fadeOut(200);
+    return false;
+  });
+});
+</script>
+
+
+    
+    <a href="/" id="blog_badge">
+            <span style="background-image:
+            url('/assets/images/yak-small.png');"></span>
+        </a>
+    
+
+    <script>
+      function no_schema_links () {
+        var links = document.querySelectorAll('.js-remove-domain-schema');
+        if (links) {
+          for (i = 0; i < links.length; ++i) {
+            var link = links[i],
+              text = link.innerHTML,
+            no_schema = text.replace(/.*?:\/\//g, "");
+            link.innerHTML = no_schema;
+          }
+        }
+      }
+
+      window.onload = function () {
+        no_schema_links();
+      }
+    </script>
+  </body>
+
+</html>
