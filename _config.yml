@@ -8,7 +8,9 @@ baseurl: "" # the subpath of your site, e.g. /blog/
 twitter_username: none
 github_username:  none
 
-#authors
+ga-id: "UA-77782034-1"
+
+# authors
 authors:
   gharcombe-minson:
     name: Gareth Harcombe-Minson
