@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>//2016/04/22/streamline-pr-with-github-jenkins-request-builder/</loc>
+<loc>/2016/04/22/streamline-pr-with-github-jenkins-request-builder/</loc>
 <lastmod>2016-04-22T00:00:00-05:00</lastmod>
 </url>
 <url>
-<loc>//about/</loc>
+<loc>/about/</loc>
 </url>
 <url>
-<loc>//</loc>
+<loc>/</loc>
 </url>
 </urlset>
